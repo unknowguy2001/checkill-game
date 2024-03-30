@@ -3,19 +3,29 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 main {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: rgb(128, 128, 128);
+  background: linear-gradient(
+    133deg,
+    rgba(128, 128, 128, 1) 45%,
+    rgba(211, 211, 211, 1) 100%
+  );
 }
+
 #board {
   width: 644px;
   height: 640px;
   /* border: 1px solid black; */
+
   display: flex;
   flex-wrap: wrap;
 }
+
 .square {
   width: 80px;
   height: 80px;
@@ -24,21 +34,28 @@ main {
   align-items: center;
   justify-content: center;
 }
+
 .black-square {
   background-color: black;
 }
+
 .white-square {
-  background-attachment: white;
+  background-color: white;
 }
+
 .checker-piece {
   width: 40px;
   height: 40px;
-  border: 1px solid black;
   border-radius: 50%;
+  box-shadow: 10px 10px 37px 0px rgba(0, 0, 0, 0.49);
+  -webkit-box-shadow: 10px 10px 37px 0px rgba(0, 0, 0, 0.49);
+  -moz-box-shadow: 10px 10px 37px 0px rgba(0, 0, 0, 0.49);
 }
+
 .red-checker {
   background-color: blue;
 }
+
 .blue-checker {
   background-color: red;
 }
