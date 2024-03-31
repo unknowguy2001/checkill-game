@@ -12,6 +12,8 @@ const starter = [
     "Y", "", "Y", "", "Y", "", "Y", "",
 ];
 
+let firstPlayer = "red-checker";
+
 const renderGame = () => {
   let isBlack = true;
 
@@ -31,11 +33,9 @@ const renderGame = () => {
       let checkerPiece = document.createElement("div");
       checkerPiece.classList.add("checker-piece");
 
-      if (starter[i] == "X") {
-        checkerPiece.classList.add("red-checker");
-      } else {
-        checkerPiece.classList.add("blue-checker");
-      }
+      checkerPiece.classList.add(
+        starter[i] == "X" ? "blue-checker" : "red-checker"
+      );
 
       square.appendChild(checkerPiece);
     }
@@ -54,4 +54,30 @@ const renderGame = () => {
     isBlack = !isBlack;
   }
 };
+
+function gameStart() {
+  let whiteSquares = document.querySelectorAll(".white-square");
+  let startPlace = null;
+  let goalPlace = null;
+
+  whiteSquares.forEach((whiteSquare) => {
+    whiteSquare.addEventListener("click", () => {
+      if (whiteSquare.querySelector("div")) {
+        startPlace = whiteSquare.getAttribute("id");
+        goalPlace = null;
+      } else {
+        goalPlace = whiteSquare.getAttribute("id");
+
+        if (startPlace !== null) {
+          if (startPlace - goalPlace <= 10) {
+            //!TODO: create movement
+          }
+        }
+        startPlace = null;
+      }
+    });
+  });
+}
+
 renderGame();
+gameStart();
