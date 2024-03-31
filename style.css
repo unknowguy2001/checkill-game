@@ -59,3 +59,7 @@ main {
 .blue-checker {
   background-color: blue;
 }
+
+.clickedChecker {
+  transform: scale(1.5);
+}
