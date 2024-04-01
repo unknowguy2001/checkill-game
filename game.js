@@ -11,9 +11,11 @@ const starter = [
     "", "Y", "", "Y", "", "Y", "", "Y",
     "Y", "", "Y", "", "Y", "", "Y", "",
 ];
+
 let randomPlayer = Math.round(Math.random() * 2);
 let player = randomPlayer == 1 ? "red-checker" : "blue-checker";
 console.log(player);
+
 const renderGame = () => {
   let isBlack = true;
 
@@ -54,7 +56,7 @@ const renderGame = () => {
     isBlack = !isBlack;
   }
 };
-
+//!TODO: fix bug can move backward (hint: maybe I can use rows and columns but how ?)
 function gameStart() {
   let whiteSquares = document.querySelectorAll(".white-square");
   let startPlace = null;
@@ -63,10 +65,11 @@ function gameStart() {
   whiteSquares.forEach((whiteSquare) => {
     whiteSquare.addEventListener("click", () => {
       if (whiteSquare.querySelector("div")) {
-        let clicked = document.querySelectorAll(".clickedChecker");
+        let clickedCheckers = document.querySelectorAll(".clickedChecker");
 
-        clicked.forEach((element) => {
-          element.classList.remove("clickedChecker");
+        //remove last clicked
+        clickedCheckers.forEach((clickedChecker) => {
+          clickedChecker.classList.remove("clickedChecker");
         });
 
         startPlace = whiteSquare.getAttribute("id");
@@ -75,9 +78,7 @@ function gameStart() {
           .getElementById(startPlace)
           .querySelector("div");
 
-        console.log(player);
         let isCurrentPlayer = selectedChecker.classList.contains(player);
-        console.log(isCurrentPlayer);
 
         if (isCurrentPlayer) {
           let checker = whiteSquare.querySelector("div");
@@ -94,9 +95,13 @@ function gameStart() {
             .getElementById(startPlace)
             .querySelector("div");
           let isCurrentPlayer = checker.classList.contains(player);
+
           if (isCurrentPlayer) {
-            //!TODO:(bug) It can move to any square.
-            if (startPlace - destinationPlace <= 10) {
+            let canCheckerMove =
+              Math.abs(destinationPlace - startPlace) == 7 ||
+              Math.abs(destinationPlace - startPlace) == 9;
+
+            if (canCheckerMove) {
               let oldCheckerPlace = document.getElementById(startPlace);
               let newChecker = oldCheckerPlace.querySelector("div");
               let newCheckerPlace = document.getElementById(destinationPlace);
@@ -104,9 +109,12 @@ function gameStart() {
               oldCheckerPlace.removeChild(oldCheckerPlace.querySelector("div"));
               newCheckerPlace.appendChild(newChecker);
               newChecker.classList.remove("clickedChecker");
-              player == "red-checker"
-                ? (player = "blue-checker")
-                : "red-checker";
+
+              if (player == "red-checker") {
+                player = "blue-checker";
+              } else {
+                player = "red-checker";
+              }
             }
           }
         }
