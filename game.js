@@ -58,10 +58,28 @@ const renderGame = () => {
 };
 //!TODO: fix bug can move backward (hint: maybe I can use rows and columns but how ?)
 function gameStart() {
+  movement(player);
+}
+
+function movement(player) {
   let whiteSquares = document.querySelectorAll(".white-square");
   let startPlace = null;
   let destinationPlace = null;
 
+  function move() {
+    let oldCheckerPlace = document.getElementById(startPlace);
+    let newChecker = oldCheckerPlace.querySelector("div");
+    let newCheckerPlace = document.getElementById(destinationPlace);
+
+    oldCheckerPlace.removeChild(oldCheckerPlace.querySelector("div"));
+    newCheckerPlace.appendChild(newChecker);
+    newChecker.classList.remove("clickedChecker");
+    if (player == "red-checker") {
+      player = "blue-checker";
+    } else {
+      player = "red-checker";
+    }
+  }
   whiteSquares.forEach((whiteSquare) => {
     whiteSquare.addEventListener("click", () => {
       if (whiteSquare.querySelector("div")) {
@@ -97,23 +115,30 @@ function gameStart() {
           let isCurrentPlayer = checker.classList.contains(player);
 
           if (isCurrentPlayer) {
-            let canCheckerMove =
-              Math.abs(destinationPlace - startPlace) == 7 ||
-              Math.abs(destinationPlace - startPlace) == 9;
+            let canRedMove =
+              destinationPlace - startPlace == -7 ||
+              destinationPlace - startPlace == -9;
 
-            if (canCheckerMove) {
-              let oldCheckerPlace = document.getElementById(startPlace);
-              let newChecker = oldCheckerPlace.querySelector("div");
-              let newCheckerPlace = document.getElementById(destinationPlace);
+            let canBlueMove =
+              destinationPlace - startPlace == 7 ||
+              destinationPlace - startPlace == 9;
 
-              oldCheckerPlace.removeChild(oldCheckerPlace.querySelector("div"));
-              newCheckerPlace.appendChild(newChecker);
-              newChecker.classList.remove("clickedChecker");
+            //!TODO: implement capture function
+            let canRedCapture =
+              destinationPlace - startPlace == 14 ||
+              destinationPlace - startPlace == 18;
 
-              if (player == "red-checker") {
-                player = "blue-checker";
-              } else {
-                player = "red-checker";
+            let canBlueCapture =
+              destinationPlace - startPlace == -14 ||
+              destinationPlace - startPlace == -18;
+
+            if (player == "red-checker") {
+              if (canRedMove) {
+                move();
+              }
+            } else {
+              if (canBlueMove) {
+                move();
               }
             }
           }
