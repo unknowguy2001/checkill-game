@@ -56,7 +56,6 @@ const renderGame = () => {
     isBlack = !isBlack;
   }
 };
-//!TODO: fix bug can move backward (hint: maybe I can use rows and columns but how ?)
 function gameStart() {
   movement(player);
 }
