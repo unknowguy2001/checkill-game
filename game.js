@@ -78,10 +78,12 @@ function movement(player) {
     } else {
       player = "red-checker";
     }
+    console.log(player);
   }
   whiteSquares.forEach((whiteSquare) => {
     whiteSquare.addEventListener("click", () => {
-      if (whiteSquare.querySelector("div")) {
+      let isHasCheckerInside = whiteSquare.querySelector("div");
+      if (isHasCheckerInside) {
         let clickedCheckers = document.querySelectorAll(".clickedChecker");
 
         //remove last clicked
@@ -124,20 +126,121 @@ function movement(player) {
 
             //!TODO: implement capture function
             let canRedCapture =
-              destinationPlace - startPlace == 14 ||
-              destinationPlace - startPlace == 18;
-
-            let canBlueCapture =
               destinationPlace - startPlace == -14 ||
               destinationPlace - startPlace == -18;
+
+            let canBlueCapture =
+              destinationPlace - startPlace == 14 ||
+              destinationPlace - startPlace == 18;
 
             if (player == "red-checker") {
               if (canRedMove) {
                 move();
+              } else if (canRedCapture) {
+                //check if destination has not checker
+                if (
+                  !document
+                    .getElementById(destinationPlace)
+                    .querySelector("div")
+                ) {
+                  //check right
+                  if (
+                    document
+                      .getElementById(parseInt(destinationPlace) + 7)
+                      .querySelector("div")
+                  ) {
+                    if (
+                      parseInt(startPlace) - 7 ==
+                      parseInt(destinationPlace) + 7
+                    ) {
+                      let enemy = document.getElementById(
+                        parseInt(startPlace) - 7
+                      );
+
+                      enemy.removeChild(enemy.querySelector("div"));
+                      move();
+                    } else if (
+                      parseInt(startPlace) - 9 ==
+                      parseInt(destinationPlace) + 9
+                    ) {
+                      let enemy = document.getElementById(
+                        parseInt(startPlace) - 9
+                      );
+                      enemy.removeChild(enemy.querySelector("div"));
+                      move();
+                    }
+                  } else if (
+                    //check left
+                    document
+                      .getElementById(parseInt(destinationPlace) + 9)
+                      .document.querySelector("div")
+                  ) {
+                    if (
+                      parseInt(startPlace) - 9 ==
+                      parseInt(destinationPlace) + 9
+                    ) {
+                      let enemy = document.getElementById(
+                        parseInt(startPlace) - 9
+                      );
+                      enemy.removeChild(enemy.querySelector("div"));
+                      move();
+                    }
+                  }
+                }
               }
             } else {
               if (canBlueMove) {
                 move();
+              } else if (canBlueCapture) {
+                //check if destination has not checker
+                if (
+                  !document
+                    .getElementById(destinationPlace)
+                    .querySelector("div")
+                ) {
+                  if (
+                    document
+                      .getElementById(parseInt(destinationPlace) - 7)
+                      .querySelector("div")
+                  ) {
+                    if (
+                      parseInt(startPlace) + 7 ==
+                      parseInt(destinationPlace) - 7
+                    ) {
+                      let enemy = document.getElementById(
+                        parseInt(startPlace) + 7
+                      );
+
+                      enemy.removeChild(enemy.querySelector("div"));
+                      move();
+                    } else if (
+                      parseInt(startPlace) + 9 ==
+                      parseInt(destinationPlace) - 9
+                    ) {
+                      let enemy = document.getElementById(
+                        parseInt(startPlace) + 9
+                      );
+                      enemy.removeChild(enemy.querySelector("div"));
+                      move();
+                    }
+                  } else if (
+                    //check left
+                    document
+                      .getElementById(parseInt(destinationPlace) - 9)
+                      .document.querySelector("div")
+                  ) {
+                    if (
+                      parseInt(startPlace) + 9 ==
+                      parseInt(destinationPlace) - 9
+                    ) {
+                      let enemy = document.getElementById(
+                        parseInt(startPlace) + 9
+                      );
+                      enemy.removeChild(enemy.querySelector("div"));
+                      move();
+                    }
+                  }
+                }
               }
             }
           }
