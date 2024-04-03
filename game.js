@@ -20,42 +20,46 @@ const renderGame = () => {
   let isBlack = true;
 
   for (let i = 0; i < starter.length; i++) {
-    let square = document.createElement("div");
+    let square = createSquare(i);
+    toggleSquareColor(square, isBlack);
+    appendSquare(square);
 
-    square.classList.add("square");
-    square.setAttribute("id", i);
-
-    isBlack
-      ? square.classList.add("black-square")
-      : square.classList.add("white-square");
-
-    board.appendChild(square);
-
-    if (starter[i] != "") {
-      let checkerPiece = document.createElement("div");
-      checkerPiece.classList.add("checker-piece");
-
-      checkerPiece.classList.add(
-        starter[i] == "X" ? "blue-checker" : "red-checker"
-      );
-
+    if (starter[i] !== "") {
+      let checkerPiece = createCheckerPiece(starter[i]);
       square.appendChild(checkerPiece);
     }
 
-    if (
-      i == 7 ||
-      i == 15 ||
-      i == 23 ||
-      i == 31 ||
-      i == 39 ||
-      i == 47 ||
-      i == 55
-    ) {
+    if ([7, 15, 23, 31, 39, 47, 55].includes(i)) {
       continue;
     }
     isBlack = !isBlack;
   }
 };
+
+const createSquare = (index) => {
+  let square = document.createElement("div");
+  square.classList.add("square");
+  square.setAttribute("id", index);
+  return square;
+};
+
+const toggleSquareColor = (square, isBlack) => {
+  isBlack
+    ? square.classList.add("black-square")
+    : square.classList.add("white-square");
+};
+
+const appendSquare = (square) => {
+  board.appendChild(square);
+};
+
+const createCheckerPiece = (type) => {
+  let checkerPiece = document.createElement("div");
+  checkerPiece.classList.add("checker-piece");
+  checkerPiece.classList.add(type === "X" ? "blue-checker" : "red-checker");
+  return checkerPiece;
+};
+
 function gameStart() {
   movement(player);
 }
@@ -64,15 +68,51 @@ function movement(player) {
   let whiteSquares = document.querySelectorAll(".white-square");
   let startPlace = null;
   let destinationPlace = null;
+  const kingPlaceRed = [1, 3, 5, 7];
+  const kingPlaceBlue = [56, 58, 60, 62];
+
+  //!TODO: implement kingMove function
+  function kingMove() {
+    // find skill that king has
+    // basic move of king
+    let oldCheckerPlace = document.getElementById(startPlace);
+    let newChecker = oldCheckerPlace.querySelector("div");
+    let newCheckerPlace = document.getElementById(destinationPlace);
+    if (parseInt(destinationPlace) < parseInt(startPlace)) {
+      let readyToMove = false;
+      // while (readyToMove) {}
+    }
+  }
 
   function move() {
     let oldCheckerPlace = document.getElementById(startPlace);
     let newChecker = oldCheckerPlace.querySelector("div");
     let newCheckerPlace = document.getElementById(destinationPlace);
 
+    if (oldCheckerPlace.querySelector("div").classList.contains("king")) {
+      kingMove();
+    }
+
     oldCheckerPlace.removeChild(oldCheckerPlace.querySelector("div"));
     newCheckerPlace.appendChild(newChecker);
     newChecker.classList.remove("clickedChecker");
+
+    if (
+      player == "red-checker" &&
+      kingPlaceRed.find((val) => {
+        return val == parseInt(destinationPlace);
+      })
+    ) {
+      beKing(player, newChecker);
+    } else if (
+      player == "blue-checker" &&
+      kingPlaceBlue.find((val) => {
+        return val == parseInt(destinationPlace);
+      })
+    ) {
+      beKing(player, newChecker);
+    }
+
     if (player == "red-checker") {
       player = "blue-checker";
     } else {
@@ -124,7 +164,6 @@ function movement(player) {
               destinationPlace - startPlace == 7 ||
               destinationPlace - startPlace == 9;
 
-            //!TODO: implement capture function
             let canRedCapture =
               destinationPlace - startPlace == -14 ||
               destinationPlace - startPlace == -18;
@@ -134,8 +173,13 @@ function movement(player) {
               destinationPlace - startPlace == 18;
 
             if (player == "red-checker") {
+              //!TODO: fix this logic
               if (canRedMove) {
-                move();
+                let isKing = checker.classList.contains("king");
+                if (!isKing) {
+                  move();
+                }
+                kingMove();
               } else if (canRedCapture) {
                 //check if destination has not checker
                 if (
@@ -190,7 +234,11 @@ function movement(player) {
               }
             } else {
               if (canBlueMove) {
-                move();
+                let isKing = checker.classList.contains("king");
+                if (!isKing) {
+                  move();
+                }
+                kingMove();
               } else if (canBlueCapture) {
                 //check if destination has not checker
                 if (
@@ -251,5 +299,12 @@ function movement(player) {
   });
 }
 
+function beKing(player, checker) {
+  const skills = [];
+  if (!checker.getAttribute("id") && !checker.classList.contains("king")) {
+    //checker.setAttribute("id");
+    checker.classList.add("king");
+  }
+}
 renderGame();
 gameStart();
