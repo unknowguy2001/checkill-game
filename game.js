@@ -75,9 +75,56 @@ function movement(player) {
     const oldCheckerPlace = document.getElementById(startPlace);
     const newChecker = oldCheckerPlace.querySelector("div");
     const newCheckerPlace = document.getElementById(destinationPlace);
+    const isKing = newChecker.classList.contains("king");
 
-    if (newChecker.classList.contains("king")) {
-      kingMove(startPlace, destinationPlace);
+    //!TODO: fix bug red king can't  capture and implement blue king move and capture
+    if (isKing) {
+      let topToBottom = parseInt(destinationPlace) - parseInt(startPlace);
+      let bottomToTop = parseInt(startPlace) - parseInt(destinationPlace);
+
+      let leftTop = topToBottom / 7;
+      let rightTop = topToBottom / 9;
+      let leftbottom = bottomToTop / 9;
+      //let rightBottom = bottomToTop / 7;
+      if (leftTop % 1 == 0) {
+        let s = parseInt(startPlace);
+        console.log("correct");
+        while (s <= destinationPlace) {
+          s += 7;
+
+          if (document.getElementById(s).querySelector("div")) {
+            console.log(document.getElementById(s).querySelector("div"));
+            break;
+          }
+          if (s == destinationPlace) {
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+        }
+      } else if (rightTop % 1 == 0) {
+        let s = parseInt(startPlace);
+
+        while (s <= destinationPlace) {
+          console.log(s);
+          s += 9;
+          if (s == destinationPlace) {
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+          if (document.getElementById(s).querySelector("div")) {
+            console.log("enemy");
+            break;
+          }
+        }
+      } else if (leftbottom % 1 == 0) {
+      } else {
+      }
     }
 
     oldCheckerPlace.removeChild(newChecker);
@@ -137,89 +184,73 @@ function movement(player) {
             const canBlueCapture =
               moveDifference === 14 || moveDifference === 18;
 
-            if (checker.classList.contains("king")) {
-              kingMove(startPlace, destinationPlace);
-            } else {
-              if (player === "red-checker") {
-                if (canRedMove) {
-                  const isKing = checker.classList.contains("king");
-                  if (!isKing) {
-                    move();
-                  } else {
-                    kingMove(startPlace, destinationPlace);
-                  }
-                } else if (canRedCapture) {
+            if (player === "red-checker") {
+              if (checker.classList.contains("king")) {
+                move();
+              }
+              if (canRedMove) {
+                move();
+              } else if (canRedCapture) {
+                if (
+                  !document
+                    .getElementById(destinationPlace)
+                    .querySelector("div")
+                ) {
+                  const rightNeighbor = document.getElementById(
+                    parseInt(destinationPlace) + 7
+                  );
+                  const leftNeighbor = document.getElementById(
+                    parseInt(destinationPlace) + 9
+                  );
                   if (
-                    !document
-                      .getElementById(destinationPlace)
-                      .querySelector("div")
+                    rightNeighbor &&
+                    parseInt(startPlace) - 7 === parseInt(destinationPlace) + 7
                   ) {
-                    const rightNeighbor = document.getElementById(
-                      parseInt(destinationPlace) + 7
+                    rightNeighbor.removeChild(
+                      rightNeighbor.querySelector("div")
                     );
-                    const leftNeighbor = document.getElementById(
-                      parseInt(destinationPlace) + 9
-                    );
-                    if (
-                      rightNeighbor &&
-                      parseInt(startPlace) - 7 ===
-                        parseInt(destinationPlace) + 7
-                    ) {
-                      rightNeighbor.removeChild(
-                        rightNeighbor.querySelector("div")
-                      );
-                      move();
-                    } else if (
-                      leftNeighbor &&
-                      parseInt(startPlace) - 9 ===
-                        parseInt(destinationPlace) + 9
-                    ) {
-                      leftNeighbor.removeChild(
-                        leftNeighbor.querySelector("div")
-                      );
-                      move();
-                    }
+                    move();
+                  } else if (
+                    leftNeighbor &&
+                    parseInt(startPlace) - 9 === parseInt(destinationPlace) + 9
+                  ) {
+                    leftNeighbor.removeChild(leftNeighbor.querySelector("div"));
+                    move();
                   }
                 }
-              } else {
-                if (canBlueMove) {
-                  const isKing = checker.classList.contains("king");
-                  if (!isKing) {
-                    move();
-                  } else {
-                    kingMove(startPlace, destinationPlace);
-                  }
-                } else if (canBlueCapture) {
+              }
+            } else {
+              if (checker.classList.contains("king")) {
+                move();
+              }
+              if (canBlueMove) {
+                move();
+              } else if (canBlueCapture) {
+                if (
+                  !document
+                    .getElementById(destinationPlace)
+                    .querySelector("div")
+                ) {
+                  const rightNeighbor = document.getElementById(
+                    parseInt(destinationPlace) - 7
+                  );
+                  const leftNeighbor = document.getElementById(
+                    parseInt(destinationPlace) - 9
+                  );
                   if (
-                    !document
-                      .getElementById(destinationPlace)
-                      .querySelector("div")
+                    rightNeighbor &&
+                    parseInt(startPlace) + 7 === parseInt(destinationPlace) - 7
                   ) {
-                    const rightNeighbor = document.getElementById(
-                      parseInt(destinationPlace) - 7
+                    rightNeighbor.removeChild(
+                      rightNeighbor.querySelector("div")
                     );
-                    const leftNeighbor = document.getElementById(
-                      parseInt(destinationPlace) - 9
-                    );
-                    if (
-                      rightNeighbor &&
-                      parseInt(startPlace) + 7 ===
-                        parseInt(destinationPlace) - 7
-                    ) {
-                      rightNeighbor.removeChild(
-                        rightNeighbor.querySelector("div")
-                      );
-                      move();
-                    } else if (
-                      leftNeighbor &&
-                      parseInt(startPlace) + 9 ===
-                        parseInt(destinationPlace) - 9
-                    ) {
-                      leftNeighbor.removeChild(
-                        leftNeighbor.querySelector("div")
-                      );
-                      move();
-                    }
+                    move();
+                  } else if (
+                    leftNeighbor &&
+                    parseInt(startPlace) + 9 === parseInt(destinationPlace) - 9
+                  ) {
+                    leftNeighbor.removeChild(leftNeighbor.querySelector("div"));
+                    move();
                   }
                 }
               }
@@ -240,107 +271,5 @@ function beKing(player, checker) {
   }
 }
 
-//!TODO: implement kingMove function
-function kingMove(startPlace, destinationPlace) {
-  const oldCheckerPlace = document.getElementById(startPlace);
-  const newChecker = oldCheckerPlace.querySelector("div");
-  const newCheckerPlace = document.getElementById(destinationPlace);
-
-  //check X asis to move
-  if (parseInt(startPlace) < parseInt(destinationPlace)) {
-    let result = calculateYAxis(startPlace, destinationPlace);
-    console.log(result);
-    if (result == "left") {
-      let starter = parseInt(startPlace);
-      while (startPlace <= parseInt(destinationPlace)) {
-        console.log("loop");
-        starter += 7;
-        if (
-          starter == parseInt(destinationPlace) &&
-          !document.getElementById(startPlace).querySelector("div")
-        ) {
-          oldCheckerPlace.removeChild(newChecker);
-          newCheckerPlace.appendChild(newChecker);
-          newChecker.classList.remove("clickedChecker");
-          break;
-        }
-
-        if (document.getElementById(startPlace).querySelector("div")) {
-          break;
-        }
-      }
-      player = player === "red-checker" ? "blue-checker" : "red-checker";
-    } else {
-      let starter = parseInt(startPlace);
-      while (startPlace <= parseInt(destinationPlace)) {
-        starter += 9;
-        if (
-          starter == parseInt(destinationPlace) &&
-          !document.getElementById(startPlace).querySelector("div")
-        ) {
-          oldCheckerPlace.removeChild(newChecker);
-          newCheckerPlace.appendChild(newChecker);
-          newChecker.classList.remove("clickedChecker");
-          break;
-        }
-
-        if (document.getElementById(startPlace).querySelector("div")) {
-          break;
-        }
-      }
-      player = player === "red-checker" ? "blue-checker" : "red-checker";
-    }
-  } else {
-    let result = calculateYAxis(startPlace, destinationPlace);
-    if (result == "left") {
-      let starter = parseInt(startPlace);
-      while (startPlace <= parseInt(destinationPlace)) {
-        console.log("loop");
-        starter += 7;
-        if (
-          starter == parseInt(destinationPlace) &&
-          !document.getElementById(startPlace).querySelector("div")
-        ) {
-          oldCheckerPlace.removeChild(newChecker);
-          newCheckerPlace.appendChild(newChecker);
-          newChecker.classList.remove("clickedChecker");
-          break;
-        }
-
-        if (document.getElementById(startPlace).querySelector("div")) {
-          break;
-        }
-      }
-      player = player === "red-checker" ? "blue-checker" : "red-checker";
-    } else {
-      let starter = parseInt(startPlace);
-      while (startPlace <= parseInt(destinationPlace)) {
-        starter += 9;
-        if (
-          starter == parseInt(destinationPlace) &&
-          !document.getElementById(startPlace).querySelector("div")
-        ) {
-          oldCheckerPlace.removeChild(newChecker);
-          newCheckerPlace.appendChild(newChecker);
-          newChecker.classList.remove("clickedChecker");
-          break;
-        }
-
-        if (document.getElementById(startPlace).querySelector("div")) {
-          break;
-        }
-      }
-      player = player === "red-checker" ? "blue-checker" : "red-checker";
-    }
-  }
-}
-function calculateYAxis(startPlace, destinationPlace) {
-  let left = Math.floor(parseInt(destinationPlace) / 7);
-  let right = Math.floor(parseInt(destinationPlace) / 9);
-  if (left > right) {
-    return "left";
-  }
-  return "right";
-}
 renderGame();
 gameStart();
