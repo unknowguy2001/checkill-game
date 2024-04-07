@@ -1,4 +1,5 @@
 const board = document.getElementById("board");
+const skills = [];
 
 // prettier-ignore
 const starter = [
@@ -14,7 +15,6 @@ const starter = [
 
 let randomPlayer = Math.round(Math.random() * 2);
 let player = randomPlayer == 1 ? "red-checker" : "blue-checker";
-console.log(player);
 
 function renderGame() {
   let isBlack = true;
@@ -61,70 +61,158 @@ function createCheckerPiece(type) {
 }
 
 function gameStart() {
-  movement(player);
+  canMoveChecker(player);
 }
 
-function movement(player) {
+function canMoveChecker(player) {
   const whiteSquares = document.querySelectorAll(".white-square");
   let startPlace = null;
   let destinationPlace = null;
   const kingPlaceRed = [1, 3, 5, 7];
   const kingPlaceBlue = [56, 58, 60, 62];
 
-  function move() {
+  function moveChecker() {
     const oldCheckerPlace = document.getElementById(startPlace);
     const newChecker = oldCheckerPlace.querySelector("div");
     const newCheckerPlace = document.getElementById(destinationPlace);
     const isKing = newChecker.classList.contains("king");
 
-    //!TODO: fix bug red king can't  capture and implement blue king move and capture
     if (isKing) {
-      let topToBottom = parseInt(destinationPlace) - parseInt(startPlace);
-      let bottomToTop = parseInt(startPlace) - parseInt(destinationPlace);
+      let topToBottomDirection =
+        parseInt(destinationPlace) - parseInt(startPlace);
+      let bottomToTopDirection =
+        parseInt(startPlace) - parseInt(destinationPlace);
 
-      let leftTop = topToBottom / 7;
-      let rightTop = topToBottom / 9;
-      let leftbottom = bottomToTop / 9;
-      //let rightBottom = bottomToTop / 7;
-      if (leftTop % 1 == 0) {
-        let s = parseInt(startPlace);
-        console.log("correct");
-        while (s <= destinationPlace) {
-          s += 7;
+      let leftTop = topToBottomDirection / 7;
+      let rightTop = topToBottomDirection / 9;
+      let leftbottom = bottomToTopDirection / 9;
 
-          if (document.getElementById(s).querySelector("div")) {
-            console.log(document.getElementById(s).querySelector("div"));
-            break;
+      const isBottomPlace = parseInt(startPlace) < parseInt(destinationPlace);
+
+      if (isBottomPlace) {
+        console.log("is not bottom");
+        if (leftTop % 1 == 0) {
+          console.log("Incorrect");
+          let currentSquareID = parseInt(startPlace);
+          let enemy = [];
+          while (currentSquareID <= destinationPlace) {
+            currentSquareID += 7;
+            if (currentSquareID == destinationPlace) {
+              if (enemy.length >= 2) break;
+              if (enemy.length == 1) {
+                console.log(enemy[0]);
+                enemy[0].parentNode.removeChild(enemy[0]);
+              }
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
+            }
+            if (document.getElementById(currentSquareID).querySelector("div")) {
+              enemy.push(
+                document.getElementById(currentSquareID).querySelector("div")
+              );
+              console.log(enemy);
+              continue;
+            }
           }
-          if (s == destinationPlace) {
-            oldCheckerPlace.removeChild(newChecker);
-            newCheckerPlace.appendChild(newChecker);
-            newChecker.classList.remove("clickedChecker");
-            player = player === "red-checker" ? "blue-checker" : "red-checker";
-            break;
+        } else {
+          let currentSquareID = parseInt(startPlace);
+          let enemy = [];
+          while (currentSquareID <= destinationPlace) {
+            console.log(currentSquareID);
+            currentSquareID += 9;
+            if (currentSquareID == destinationPlace) {
+              if (enemy.length >= 2) break;
+              if (enemy.length == 1) {
+                if (enemy[0].classList.contains(player)) break;
+                console.log(enemy[0]);
+                enemy[0].parentNode.removeChild(enemy[0]);
+              }
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
+            }
+            if (document.getElementById(currentSquareID).querySelector("div")) {
+              enemy.push(
+                document.getElementById(currentSquareID).querySelector("div")
+              );
+              console.log(enemy);
+              continue;
+            }
           }
         }
-      } else if (rightTop % 1 == 0) {
-        let s = parseInt(startPlace);
-
-        while (s <= destinationPlace) {
-          console.log(s);
-          s += 9;
-          if (s == destinationPlace) {
-            oldCheckerPlace.removeChild(newChecker);
-            newCheckerPlace.appendChild(newChecker);
-            newChecker.classList.remove("clickedChecker");
-            player = player === "red-checker" ? "blue-checker" : "red-checker";
-            break;
-          }
-          if (document.getElementById(s).querySelector("div")) {
-            console.log("enemy");
-            break;
-          }
-        }
-      } else if (leftbottom % 1 == 0) {
-      } else {
       }
+
+      if (leftbottom % 1 == 0) {
+        let currentSquareID = parseInt(startPlace);
+        let enemy = [];
+        while (currentSquareID >= destinationPlace) {
+          console.log("start");
+          currentSquareID -= 9;
+          if (currentSquareID == destinationPlace) {
+            if (enemy.length >= 2) break;
+            if (enemy.length == 1) {
+              console.log(enemy[0]);
+              enemy[0].parentNode.removeChild(enemy[0]);
+            }
+
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+          if (document.getElementById(currentSquareID).querySelector("div")) {
+            enemy.push(
+              document.getElementById(currentSquareID).querySelector("div")
+            );
+            console.log(enemy);
+            continue;
+          }
+        }
+      } else {
+        let currentSquareID = parseInt(startPlace);
+        let enemy = [];
+        while (currentSquareID >= destinationPlace) {
+          console.log("start");
+          currentSquareID -= 7;
+          if (currentSquareID == destinationPlace) {
+            if (enemy.length >= 2) break;
+            if (enemy.length == 1) {
+              console.log(enemy[0]);
+              enemy[0].parentNode.removeChild(enemy[0]);
+            }
+
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+          if (document.getElementById(currentSquareID).querySelector("div")) {
+            enemy.push(
+              document.getElementById(currentSquareID).querySelector("div")
+            );
+            console.log(enemy);
+            continue;
+          }
+        }
+      }
+
+      document
+        .getElementById(parseInt(startPlace))
+        .querySelector("div")
+        .classList.remove("clickedChecker");
+
+      return;
     }
 
     oldCheckerPlace.removeChild(newChecker);
@@ -147,6 +235,7 @@ function movement(player) {
   whiteSquares.forEach((whiteSquare) => {
     whiteSquare.addEventListener("click", () => {
       const isHasCheckerInside = whiteSquare.querySelector("div");
+
       if (isHasCheckerInside) {
         const clickedCheckers = document.querySelectorAll(".clickedChecker");
 
@@ -169,6 +258,7 @@ function movement(player) {
         }
       } else {
         destinationPlace = whiteSquare.getAttribute("id");
+
         if (startPlace !== null) {
           const checker = document
             .getElementById(startPlace)
@@ -186,10 +276,11 @@ function movement(player) {
 
             if (player === "red-checker") {
               if (checker.classList.contains("king")) {
-                move();
+                moveChecker();
               }
+
               if (canRedMove) {
-                move();
+                moveChecker();
               } else if (canRedCapture) {
                 if (
                   !document
@@ -199,9 +290,11 @@ function movement(player) {
                   const rightNeighbor = document.getElementById(
                     parseInt(destinationPlace) + 7
                   );
+
                   const leftNeighbor = document.getElementById(
                     parseInt(destinationPlace) + 9
                   );
+
                   if (
                     rightNeighbor &&
                     parseInt(startPlace) - 7 === parseInt(destinationPlace) + 7
@@ -209,22 +302,24 @@ function movement(player) {
                     rightNeighbor.removeChild(
                       rightNeighbor.querySelector("div")
                     );
-                    move();
+
+                    moveChecker();
                   } else if (
                     leftNeighbor &&
                     parseInt(startPlace) - 9 === parseInt(destinationPlace) + 9
                   ) {
                     leftNeighbor.removeChild(leftNeighbor.querySelector("div"));
-                    move();
+
+                    moveChecker();
                   }
                 }
               }
             } else {
               if (checker.classList.contains("king")) {
-                move();
+                moveChecker();
               }
               if (canBlueMove) {
-                move();
+                moveChecker();
               } else if (canBlueCapture) {
                 if (
                   !document
@@ -244,13 +339,13 @@ function movement(player) {
                     rightNeighbor.removeChild(
                       rightNeighbor.querySelector("div")
                     );
-                    move();
+                    moveChecker();
                   } else if (
                     leftNeighbor &&
                     parseInt(startPlace) + 9 === parseInt(destinationPlace) - 9
                   ) {
                     leftNeighbor.removeChild(leftNeighbor.querySelector("div"));
-                    move();
+                    moveChecker();
                   }
                 }
               }
@@ -263,10 +358,11 @@ function movement(player) {
   });
 }
 
+//!TODO: Implement skill into beKing function
 function beKing(player, checker) {
-  const skills = [];
   if (!checker.getAttribute("id") && !checker.classList.contains("king")) {
-    //checker.setAttribute("id");
+    const probabilities = [0.5, 0.4, 0.3, 0.2, 0.1];
+
     checker.classList.add("king");
   }
 }

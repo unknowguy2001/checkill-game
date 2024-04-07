@@ -63,3 +63,7 @@ main {
 .clickedChecker {
   transform: scale(1.5);
 }
+
+.king {
+  border: 3px solid black;
+}
