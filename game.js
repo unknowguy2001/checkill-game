@@ -1,5 +1,10 @@
 const board = document.getElementById("board");
-const skills = [];
+//protection = can't captured with starndard piece
+//
+//
+//son-of-god = when captured enemy will random piece to be king
+//unstopable = Can capture multiple enemies in a row.
+const skills = ["protection", "", "", "son-of-god", "unstopable"];
 
 // prettier-ignore
 const starter = [
@@ -299,18 +304,32 @@ function canMoveChecker(player) {
                     rightNeighbor &&
                     parseInt(startPlace) - 7 === parseInt(destinationPlace) + 7
                   ) {
-                    rightNeighbor.removeChild(
-                      rightNeighbor.querySelector("div")
-                    );
+                    if (
+                      !rightNeighbor
+                        .querySelector("div")
+                        .classList.contains("protection")
+                    ) {
+                      rightNeighbor.removeChild(
+                        rightNeighbor.querySelector("div")
+                      );
 
-                    moveChecker();
+                      moveChecker();
+                    }
                   } else if (
                     leftNeighbor &&
                     parseInt(startPlace) - 9 === parseInt(destinationPlace) + 9
                   ) {
-                    leftNeighbor.removeChild(leftNeighbor.querySelector("div"));
+                    if (
+                      !leftNeighbor
+                        .querySelector("div")
+                        .classList.contains("protection")
+                    ) {
+                      leftNeighbor.removeChild(
+                        leftNeighbor.querySelector("div")
+                      );
 
-                    moveChecker();
+                      moveChecker();
+                    }
                   }
                 }
               }
@@ -336,16 +355,30 @@ function canMoveChecker(player) {
                     rightNeighbor &&
                     parseInt(startPlace) + 7 === parseInt(destinationPlace) - 7
                   ) {
-                    rightNeighbor.removeChild(
-                      rightNeighbor.querySelector("div")
-                    );
-                    moveChecker();
+                    if (
+                      !rightNeighbor
+                        .querySelector("div")
+                        .classList.contains("protection")
+                    ) {
+                      rightNeighbor.removeChild(
+                        rightNeighbor.querySelector("div")
+                      );
+                      moveChecker();
+                    }
                   } else if (
                     leftNeighbor &&
                     parseInt(startPlace) + 9 === parseInt(destinationPlace) - 9
                   ) {
-                    leftNeighbor.removeChild(leftNeighbor.querySelector("div"));
-                    moveChecker();
+                    if (
+                      !leftNeighbor
+                        .querySelector("div")
+                        .classList.contains("protection")
+                    ) {
+                      leftNeighbor.removeChild(
+                        leftNeighbor.querySelector("div")
+                      );
+                      moveChecker();
+                    }
                   }
                 }
               }
@@ -359,11 +392,24 @@ function canMoveChecker(player) {
 }
 
 //!TODO: Implement skill into beKing function
-function beKing(player, checker) {
+function beKing(skills, checker) {
   if (!checker.getAttribute("id") && !checker.classList.contains("king")) {
     const probabilities = [0.5, 0.4, 0.3, 0.2, 0.1];
 
-    checker.classList.add("king");
+    let totalWeight = probabilities.reduce((acc, val) => acc + val, 0);
+    let randomNum = Math.random() * totalWeight;
+    let cumulativeProbability = 0;
+
+    for (let i = 0; i < skills.length; i++) {
+      cumulativeProbability += probabilities[i];
+
+      if (randomNum < cumulativeProbability) {
+        checker.classList.add("king");
+        checker.classList.add(skills[i]);
+        break;
+      }
+    }
+    //checker.classList.add("king");
   }
 }
 
