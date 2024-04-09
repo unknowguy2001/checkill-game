@@ -1,10 +1,10 @@
 const board = document.getElementById("board");
 //protection = can't captured with starndard piece
-//
-//
+//hunter = if can captured enemy, hunter will continuously move
+//revive = when enemy capture this piece will not die (just 1)
 //son-of-god = when captured enemy will random piece to be king
 //unstopable = Can capture multiple enemies in a row.
-const skills = ["protection", "", "", "son-of-god", "unstopable"];
+const skills = ["protection", "hunter", "revive", "son-of-god", "unstopable"];
 
 // prettier-ignore
 const starter = [
@@ -71,10 +71,10 @@ function gameStart() {
 
 function canMoveChecker(player) {
   const whiteSquares = document.querySelectorAll(".white-square");
-  let startPlace = null;
-  let destinationPlace = null;
-  const kingPlaceRed = [1, 3, 5, 7];
-  const kingPlaceBlue = [56, 58, 60, 62];
+  let startPlace = null; //This variable will store the ID of the square that the chosen checker lives in before moving.
+  let destinationPlace = null; //This variable will store the ID of the square that the checker will move.
+  const kingPlaceRed = [1, 3, 5, 7]; // This variable stores the ID of the square; if the red checker moves in, that checker will be king.
+  const kingPlaceBlue = [56, 58, 60, 62]; // This variable stores the ID of the square; if the blue checker moves in, that checker will be king.
 
   function moveChecker() {
     const oldCheckerPlace = document.getElementById(startPlace);
@@ -97,16 +97,26 @@ function canMoveChecker(player) {
       if (isBottomPlace) {
         console.log("is not bottom");
         if (leftTop % 1 == 0) {
-          console.log("Incorrect");
           let currentSquareID = parseInt(startPlace);
           let enemy = [];
           while (currentSquareID <= destinationPlace) {
             currentSquareID += 7;
             if (currentSquareID == destinationPlace) {
+              if (newChecker.classList.contains("unstopable")) {
+                //check is has my team in enemy ?
+              }
               if (enemy.length >= 2) break;
               if (enemy.length == 1) {
-                console.log(enemy[0]);
+                // Capture enemy.
+                if (enemy[0].classList.contains(player)) break;
                 enemy[0].parentNode.removeChild(enemy[0]);
+                oldCheckerPlace.removeChild(newChecker);
+                newCheckerPlace.appendChild(newChecker);
+                newChecker.classList.remove("clickedChecker");
+                if (newChecker.classList.contains("hunter")) break;
+                player =
+                  player === "red-checker" ? "blue-checker" : "red-checker";
+                break;
               }
 
               oldCheckerPlace.removeChild(newChecker);
@@ -116,11 +126,12 @@ function canMoveChecker(player) {
                 player === "red-checker" ? "blue-checker" : "red-checker";
               break;
             }
+            // Check if there is an enemy in the square that the king will move through.
             if (document.getElementById(currentSquareID).querySelector("div")) {
               enemy.push(
+                // Store the ID of the square that the enemy lives in.
                 document.getElementById(currentSquareID).querySelector("div")
               );
-              console.log(enemy);
               continue;
             }
           }
@@ -128,25 +139,40 @@ function canMoveChecker(player) {
           let currentSquareID = parseInt(startPlace);
           let enemy = [];
           while (currentSquareID <= destinationPlace) {
-            console.log(currentSquareID);
             currentSquareID += 9;
+
             if (currentSquareID == destinationPlace) {
               if (enemy.length >= 2) break;
+
               if (enemy.length == 1) {
+                // Capture enemy.
                 if (enemy[0].classList.contains(player)) break;
-                console.log(enemy[0]);
+
+                oldCheckerPlace.removeChild(newChecker);
+                newCheckerPlace.appendChild(newChecker);
+                newChecker.classList.remove("clickedChecker");
                 enemy[0].parentNode.removeChild(enemy[0]);
+
+                if (newChecker.classList.contains("hunter")) break;
+
+                player =
+                  player === "red-checker" ? "blue-checker" : "red-checker";
+                break;
               }
 
               oldCheckerPlace.removeChild(newChecker);
               newCheckerPlace.appendChild(newChecker);
               newChecker.classList.remove("clickedChecker");
+
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
               break;
             }
+
+            // Check if there is an enemy in the square that the king will move through.
             if (document.getElementById(currentSquareID).querySelector("div")) {
               enemy.push(
+                // Store the ID of the square that the enemy lives in.
                 document.getElementById(currentSquareID).querySelector("div")
               );
               console.log(enemy);
@@ -212,6 +238,7 @@ function canMoveChecker(player) {
         }
       }
 
+      // Remove the clicked effect if the checker can't move.
       document
         .getElementById(parseInt(startPlace))
         .querySelector("div")
@@ -230,7 +257,7 @@ function canMoveChecker(player) {
       (player === "blue-checker" &&
         kingPlaceBlue.includes(parseInt(destinationPlace)))
     ) {
-      beKing(player, newChecker);
+      beKing(skills, newChecker);
     }
 
     player = player === "red-checker" ? "blue-checker" : "red-checker";
@@ -406,6 +433,7 @@ function beKing(skills, checker) {
       if (randomNum < cumulativeProbability) {
         checker.classList.add("king");
         checker.classList.add(skills[i]);
+        //!TODO: implement first character of skill name display on king piece.
         break;
       }
     }
