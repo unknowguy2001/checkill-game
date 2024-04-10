@@ -2,9 +2,8 @@ const board = document.getElementById("board");
 //protection = can't captured with starndard piece
 //hunter = if can captured enemy, hunter will continuously move
 //revive = when enemy capture this piece will not die (just 1)
-//son-of-god = when captured enemy will random piece to be king
 //unstopable = Can capture multiple enemies in a row.
-const skills = ["protection", "hunter", "revive", "son-of-god", "unstopable"];
+const skills = ["protection", "hunter", "revive", "unstopable"];
 
 // prettier-ignore
 const starter = [
@@ -89,7 +88,7 @@ function canMoveChecker(player) {
         parseInt(startPlace) - parseInt(destinationPlace);
 
       let leftTop = topToBottomDirection / 7;
-      let rightTop = topToBottomDirection / 9;
+      //let rightTop = topToBottomDirection / 9;
       let leftbottom = bottomToTopDirection / 9;
 
       const isBottomPlace = parseInt(startPlace) < parseInt(destinationPlace);
@@ -418,26 +417,29 @@ function canMoveChecker(player) {
   });
 }
 
-//!TODO: Implement skill into beKing function
 function beKing(skills, checker) {
   if (!checker.getAttribute("id") && !checker.classList.contains("king")) {
-    const probabilities = [0.5, 0.4, 0.3, 0.2, 0.1];
+    const randomSkills = Math.round(Math.random() * 4);
 
-    let totalWeight = probabilities.reduce((acc, val) => acc + val, 0);
-    let randomNum = Math.random() * totalWeight;
-    let cumulativeProbability = 0;
-
-    for (let i = 0; i < skills.length; i++) {
-      cumulativeProbability += probabilities[i];
-
-      if (randomNum < cumulativeProbability) {
+    switch (randomSkills) {
+      case 1:
         checker.classList.add("king");
-        checker.classList.add(skills[i]);
-        //!TODO: implement first character of skill name display on king piece.
+        checker.classList.add(skills[0]);
         break;
-      }
+      case 2:
+        checker.classList.add("king");
+        checker.classList.add(skills[1]);
+        break;
+      case 3:
+        checker.classList.add("king");
+        checker.classList.add(skills[2]);
+        break;
+      case 4:
+        checker.classList.add("king");
+        checker.classList.add(skills[3]);
+        break;
     }
-    //checker.classList.add("king");
+    //!TODO: Add something to indicate that the checker has skills.
   }
 }
 
