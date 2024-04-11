@@ -94,7 +94,6 @@ function canMoveChecker(player) {
       const isBottomPlace = parseInt(startPlace) < parseInt(destinationPlace);
 
       if (isBottomPlace) {
-        console.log("is not bottom");
         if (leftTop % 1 == 0) {
           let currentSquareID = parseInt(startPlace);
           let enemy = [];
@@ -108,11 +107,15 @@ function canMoveChecker(player) {
               if (enemy.length == 1) {
                 // Capture enemy.
                 if (enemy[0].classList.contains(player)) break;
+
                 enemy[0].parentNode.removeChild(enemy[0]);
                 oldCheckerPlace.removeChild(newChecker);
                 newCheckerPlace.appendChild(newChecker);
                 newChecker.classList.remove("clickedChecker");
-                if (newChecker.classList.contains("hunter")) break;
+
+                if (newChecker.classList.contains("hunter")) {
+                  break;
+                }
                 player =
                   player === "red-checker" ? "blue-checker" : "red-checker";
                 break;
@@ -150,9 +153,12 @@ function canMoveChecker(player) {
                 oldCheckerPlace.removeChild(newChecker);
                 newCheckerPlace.appendChild(newChecker);
                 newChecker.classList.remove("clickedChecker");
+
                 enemy[0].parentNode.removeChild(enemy[0]);
 
-                if (newChecker.classList.contains("hunter")) break;
+                if (newChecker.classList.contains("hunter")) {
+                  break;
+                }
 
                 player =
                   player === "red-checker" ? "blue-checker" : "red-checker";
@@ -190,8 +196,19 @@ function canMoveChecker(player) {
           if (currentSquareID == destinationPlace) {
             if (enemy.length >= 2) break;
             if (enemy.length == 1) {
-              console.log(enemy[0]);
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+
               enemy[0].parentNode.removeChild(enemy[0]);
+
+              if (newChecker.classList.contains("hunter")) {
+                break;
+              }
+
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
             }
 
             oldCheckerPlace.removeChild(newChecker);
@@ -204,7 +221,6 @@ function canMoveChecker(player) {
             enemy.push(
               document.getElementById(currentSquareID).querySelector("div")
             );
-            console.log(enemy);
             continue;
           }
         }
@@ -217,8 +233,20 @@ function canMoveChecker(player) {
           if (currentSquareID == destinationPlace) {
             if (enemy.length >= 2) break;
             if (enemy.length == 1) {
-              console.log(enemy[0]);
+              if (enemy[0].classList.contains(player)) break;
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
               enemy[0].parentNode.removeChild(enemy[0]);
+
+              if (newChecker.classList.contains("hunter")) {
+                break;
+              }
+
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
             }
 
             oldCheckerPlace.removeChild(newChecker);
@@ -231,7 +259,6 @@ function canMoveChecker(player) {
             enemy.push(
               document.getElementById(currentSquareID).querySelector("div")
             );
-            console.log(enemy);
             continue;
           }
         }
@@ -335,10 +362,13 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
+                      if (rightNeighbor.classList.contains("revive")) {
+                        rightNeighbor.classList.remove("revive");
+                        return;
+                      }
                       rightNeighbor.removeChild(
                         rightNeighbor.querySelector("div")
                       );
-
                       moveChecker();
                     }
                   } else if (
@@ -350,6 +380,11 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
+                      if (leftNeighbor.classList.contains("revive")) {
+                        leftNeighbor.classList.remove("revive");
+                        return;
+                      }
+
                       leftNeighbor.removeChild(
                         leftNeighbor.querySelector("div")
                       );
@@ -386,9 +421,11 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
-                      rightNeighbor.removeChild(
-                        rightNeighbor.querySelector("div")
-                      );
+                      if (!rightNeighbor.classList.contains("revive")) {
+                        rightNeighbor.removeChild(
+                          rightNeighbor.querySelector("div")
+                        );
+                      }
                       moveChecker();
                     }
                   } else if (
@@ -400,9 +437,11 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
-                      leftNeighbor.removeChild(
-                        leftNeighbor.querySelector("div")
-                      );
+                      if (!leftNeighbor.classList.contains("revive")) {
+                        leftNeighbor.removeChild(
+                          leftNeighbor.querySelector("div")
+                        );
+                      }
                       moveChecker();
                     }
                   }
@@ -418,6 +457,7 @@ function canMoveChecker(player) {
 }
 
 function beKing(skills, checker) {
+  console.log("get in");
   if (!checker.getAttribute("id") && !checker.classList.contains("king")) {
     const randomSkills = Math.round(Math.random() * 4);
 
@@ -437,6 +477,9 @@ function beKing(skills, checker) {
       case 4:
         checker.classList.add("king");
         checker.classList.add(skills[3]);
+        break;
+      default:
+        checker.classList.add("king");
         break;
     }
     //!TODO: Add something to indicate that the checker has skills.
