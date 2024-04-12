@@ -1,8 +1,8 @@
 const board = document.getElementById("board");
-//protection = can't captured with starndard piece
-//hunter = if can captured enemy, hunter will continuously move
+//* protection = can't captured with starndard piece
+//* hunter = if can captured enemy, hunter will continuously move
 //revive = when enemy capture this piece will not die (just 1)
-//unstopable = Can capture multiple enemies in a row.
+//* unstopable = Can capture multiple enemies in a row.
 const skills = ["protection", "hunter", "revive", "unstopable"];
 
 // prettier-ignore
@@ -101,7 +101,25 @@ function canMoveChecker(player) {
             currentSquareID += 7;
             if (currentSquareID == destinationPlace) {
               if (newChecker.classList.contains("unstopable")) {
-                //check is has my team in enemy ?
+                let isHasMyTeam = false;
+
+                for (let i = 0; i < enemy.length; i++) {
+                  if (enemy[i].classList.contains(player)) {
+                    isHasMyTeam = true;
+                  }
+                }
+                if (isHasMyTeam) break;
+                enemy.forEach((e) => {
+                  e.parentNode.removeChild(e);
+                });
+
+                oldCheckerPlace.removeChild(newChecker);
+                newCheckerPlace.appendChild(newChecker);
+                newChecker.classList.remove("clickedChecker");
+
+                player =
+                  player === "red-checker" ? "blue-checker" : "red-checker";
+                break;
               }
               if (enemy.length >= 2) break;
               if (enemy.length == 1) {
@@ -124,6 +142,7 @@ function canMoveChecker(player) {
               oldCheckerPlace.removeChild(newChecker);
               newCheckerPlace.appendChild(newChecker);
               newChecker.classList.remove("clickedChecker");
+
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
               break;
@@ -142,6 +161,28 @@ function canMoveChecker(player) {
           let enemy = [];
           while (currentSquareID <= destinationPlace) {
             currentSquareID += 9;
+
+            if (newChecker.classList.contains("unstopable")) {
+              let isHasMyTeam = false;
+
+              for (let i = 0; i < enemy.length; i++) {
+                if (enemy[i].classList.contains(player)) {
+                  isHasMyTeam = true;
+                }
+              }
+              if (isHasMyTeam) break;
+              enemy.forEach((e) => {
+                e.parentNode.removeChild(e);
+              });
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
+            }
 
             if (currentSquareID == destinationPlace) {
               if (enemy.length >= 2) break;
@@ -194,6 +235,28 @@ function canMoveChecker(player) {
           console.log("start");
           currentSquareID -= 9;
           if (currentSquareID == destinationPlace) {
+            if (newChecker.classList.contains("unstopable")) {
+              let isHasMyTeam = false;
+
+              for (let i = 0; i < enemy.length; i++) {
+                if (enemy[i].classList.contains(player)) {
+                  isHasMyTeam = true;
+                }
+              }
+              if (isHasMyTeam) break;
+              enemy.forEach((e) => {
+                e.parentNode.removeChild(e);
+              });
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
+            }
+
             if (enemy.length >= 2) break;
             if (enemy.length == 1) {
               oldCheckerPlace.removeChild(newChecker);
@@ -231,6 +294,28 @@ function canMoveChecker(player) {
           console.log("start");
           currentSquareID -= 7;
           if (currentSquareID == destinationPlace) {
+            if (newChecker.classList.contains("unstopable")) {
+              let isHasMyTeam = false;
+
+              for (let i = 0; i < enemy.length; i++) {
+                if (enemy[i].classList.contains(player)) {
+                  isHasMyTeam = true;
+                }
+              }
+              if (isHasMyTeam) break;
+              enemy.forEach((e) => {
+                e.parentNode.removeChild(e);
+              });
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
+            }
+
             if (enemy.length >= 2) break;
             if (enemy.length == 1) {
               if (enemy[0].classList.contains(player)) break;
@@ -457,8 +542,7 @@ function canMoveChecker(player) {
 }
 
 function beKing(skills, checker) {
-  console.log("get in");
-  if (!checker.getAttribute("id") && !checker.classList.contains("king")) {
+  if (!checker.classList.contains("king")) {
     const randomSkills = Math.round(Math.random() * 4);
 
     switch (randomSkills) {
@@ -483,6 +567,13 @@ function beKing(skills, checker) {
         break;
     }
     //!TODO: Add something to indicate that the checker has skills.
+  }
+}
+
+//!TODO: implement this function
+function removeRevive(element) {
+  if (element.classList.contains("revive")) {
+    element.classList.remove("revive");
   }
 }
 
