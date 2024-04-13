@@ -253,7 +253,7 @@ function canMoveChecker(player) {
                 // Store the ID of the square that the enemy lives in.
                 document.getElementById(currentSquareID).querySelector("div")
               );
-              console.log(enemy);
+
               continue;
             }
           }
@@ -264,7 +264,6 @@ function canMoveChecker(player) {
         let currentSquareID = parseInt(startPlace);
         let enemy = [];
         while (currentSquareID >= destinationPlace) {
-          console.log("start");
           currentSquareID -= 9;
           if (currentSquareID == destinationPlace) {
             if (newChecker.classList.contains("unstopable")) {
@@ -335,7 +334,6 @@ function canMoveChecker(player) {
         let currentSquareID = parseInt(startPlace);
         let enemy = [];
         while (currentSquareID >= destinationPlace) {
-          console.log("start");
           currentSquareID -= 7;
           if (currentSquareID == destinationPlace) {
             if (newChecker.classList.contains("unstopable")) {
@@ -428,7 +426,6 @@ function canMoveChecker(player) {
     }
 
     player = player === "red-checker" ? "blue-checker" : "red-checker";
-    console.log(player);
   }
 
   whiteSquares.forEach((whiteSquare) => {
