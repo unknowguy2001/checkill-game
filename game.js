@@ -1,7 +1,7 @@
 const board = document.getElementById("board");
 //* protection = can't captured with starndard piece
 //* hunter = if can captured enemy, hunter will continuously move
-//revive = when enemy capture this piece will not die (just 1)
+//* revive = when enemy capture this piece will not die (just 1)
 //* unstopable = Can capture multiple enemies in a row.
 const skills = ["protection", "hunter", "revive", "unstopable"];
 
@@ -108,9 +108,14 @@ function canMoveChecker(player) {
                     isHasMyTeam = true;
                   }
                 }
+
                 if (isHasMyTeam) break;
+
                 enemy.forEach((e) => {
-                  e.parentNode.removeChild(e);
+                  if (!e.classList.contains("revive")) {
+                    e.parentNode.removeChild(e);
+                  }
+                  if (e.classList.contains("revive")) removeRevive(e);
                 });
 
                 oldCheckerPlace.removeChild(newChecker);
@@ -124,9 +129,21 @@ function canMoveChecker(player) {
               if (enemy.length >= 2) break;
               if (enemy.length == 1) {
                 // Capture enemy.
+
                 if (enemy[0].classList.contains(player)) break;
 
-                enemy[0].parentNode.removeChild(enemy[0]);
+                if (!enemy[0].classList.contains("revive")) {
+                  enemy[0].parentNode.removeChild(enemy[0]);
+                }
+
+                if (enemy[0].classList.contains("revive")) {
+                  removeRevive(enemy[0]);
+                  enemy.pop();
+                }
+
+                if (enemy.length != 0)
+                  enemy[0].parentNode.removeChild(enemy[0]);
+
                 oldCheckerPlace.removeChild(newChecker);
                 newCheckerPlace.appendChild(newChecker);
                 newChecker.classList.remove("clickedChecker");
@@ -159,6 +176,7 @@ function canMoveChecker(player) {
         } else {
           let currentSquareID = parseInt(startPlace);
           let enemy = [];
+
           while (currentSquareID <= destinationPlace) {
             currentSquareID += 9;
 
@@ -172,7 +190,11 @@ function canMoveChecker(player) {
               }
               if (isHasMyTeam) break;
               enemy.forEach((e) => {
-                e.parentNode.removeChild(e);
+                if (!e.classList.contains("revive")) {
+                  e.parentNode.removeChild(e);
+                }
+
+                if (e.classList.contains("revive")) removeRevive(e);
               });
 
               oldCheckerPlace.removeChild(newChecker);
@@ -191,11 +213,21 @@ function canMoveChecker(player) {
                 // Capture enemy.
                 if (enemy[0].classList.contains(player)) break;
 
+                if (!enemy[0].classList.contains("revive")) {
+                  enemy[0].parentNode.removeChild(e);
+                }
+
+                if (enemy[0].classList.contains("revive")) {
+                  removeRevive(enemy[0]);
+                  enemy.pop();
+                }
+
                 oldCheckerPlace.removeChild(newChecker);
                 newCheckerPlace.appendChild(newChecker);
                 newChecker.classList.remove("clickedChecker");
 
-                enemy[0].parentNode.removeChild(enemy[0]);
+                if (enemy.length != 0)
+                  enemy[0].parentNode.removeChild(enemy[0]);
 
                 if (newChecker.classList.contains("hunter")) {
                   break;
@@ -245,7 +277,11 @@ function canMoveChecker(player) {
               }
               if (isHasMyTeam) break;
               enemy.forEach((e) => {
-                e.parentNode.removeChild(e);
+                if (!e.classList.contains("revive")) {
+                  e.parentNode.removeChild(e);
+                }
+
+                if (e.classList.contains("revive")) removeRevive(e);
               });
 
               oldCheckerPlace.removeChild(newChecker);
@@ -259,11 +295,19 @@ function canMoveChecker(player) {
 
             if (enemy.length >= 2) break;
             if (enemy.length == 1) {
+              if (!enemy[0].classList.contains("revive")) {
+                enemy[0].parentNode.removeChild(enemy[0]);
+              }
+
+              if (enemy[0].classList.contains("revive")) {
+                removeRevive(enemy[0]);
+                enemy.pop();
+              }
               oldCheckerPlace.removeChild(newChecker);
               newCheckerPlace.appendChild(newChecker);
               newChecker.classList.remove("clickedChecker");
 
-              enemy[0].parentNode.removeChild(enemy[0]);
+              if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
 
               if (newChecker.classList.contains("hunter")) {
                 break;
@@ -304,7 +348,11 @@ function canMoveChecker(player) {
               }
               if (isHasMyTeam) break;
               enemy.forEach((e) => {
-                e.parentNode.removeChild(e);
+                if (!e.classList.contains("revive")) {
+                  e.parentNode.removeChild(e);
+                }
+
+                if (e.classList.contains("revive")) removeRevive(e);
               });
 
               oldCheckerPlace.removeChild(newChecker);
@@ -320,10 +368,18 @@ function canMoveChecker(player) {
             if (enemy.length == 1) {
               if (enemy[0].classList.contains(player)) break;
 
+              if (!enemy[0].classList.contains("revive")) {
+                enemy[0].parentNode.removeChild(enemy[0]);
+              }
+
+              if (enemy[0].classList.contains("revive")) {
+                removeRevive(enemy[0]);
+                enemy.pop();
+              }
               oldCheckerPlace.removeChild(newChecker);
               newCheckerPlace.appendChild(newChecker);
               newChecker.classList.remove("clickedChecker");
-              enemy[0].parentNode.removeChild(enemy[0]);
+              if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
 
               if (newChecker.classList.contains("hunter")) {
                 break;
@@ -448,7 +504,7 @@ function canMoveChecker(player) {
                         .classList.contains("protection")
                     ) {
                       if (rightNeighbor.classList.contains("revive")) {
-                        rightNeighbor.classList.remove("revive");
+                        removeRevive(rightNeighbor);
                         return;
                       }
                       rightNeighbor.removeChild(
@@ -466,7 +522,7 @@ function canMoveChecker(player) {
                         .classList.contains("protection")
                     ) {
                       if (leftNeighbor.classList.contains("revive")) {
-                        leftNeighbor.classList.remove("revive");
+                        removeRevive(leftNeighbor);
                         return;
                       }
 
@@ -570,7 +626,6 @@ function beKing(skills, checker) {
   }
 }
 
-//!TODO: implement this function
 function removeRevive(element) {
   if (element.classList.contains("revive")) {
     element.classList.remove("revive");
