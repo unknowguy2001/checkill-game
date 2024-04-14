@@ -81,336 +81,14 @@ function canMoveChecker(player) {
     const newCheckerPlace = document.getElementById(destinationPlace);
     const isKing = newChecker.classList.contains("king");
 
-    if (isKing) {
-      let topToBottomDirection =
-        parseInt(destinationPlace) - parseInt(startPlace);
-      let bottomToTopDirection =
-        parseInt(startPlace) - parseInt(destinationPlace);
-
-      let leftTop = topToBottomDirection / 7;
-      //let rightTop = topToBottomDirection / 9;
-      let leftbottom = bottomToTopDirection / 9;
-
-      const isBottomPlace = parseInt(startPlace) < parseInt(destinationPlace);
-
-      if (isBottomPlace) {
-        if (leftTop % 1 == 0) {
-          let currentSquareID = parseInt(startPlace);
-          let enemy = [];
-          while (currentSquareID <= destinationPlace) {
-            currentSquareID += 7;
-            if (currentSquareID == destinationPlace) {
-              if (newChecker.classList.contains("unstopable")) {
-                let isHasMyTeam = false;
-
-                for (let i = 0; i < enemy.length; i++) {
-                  if (enemy[i].classList.contains(player)) {
-                    isHasMyTeam = true;
-                  }
-                }
-
-                if (isHasMyTeam) break;
-
-                enemy.forEach((e) => {
-                  if (!e.classList.contains("revive")) {
-                    e.parentNode.removeChild(e);
-                  }
-                  if (e.classList.contains("revive")) removeRevive(e);
-                });
-
-                oldCheckerPlace.removeChild(newChecker);
-                newCheckerPlace.appendChild(newChecker);
-                newChecker.classList.remove("clickedChecker");
-
-                player =
-                  player === "red-checker" ? "blue-checker" : "red-checker";
-                break;
-              }
-              if (enemy.length >= 2) break;
-              if (enemy.length == 1) {
-                // Capture enemy.
-
-                if (enemy[0].classList.contains(player)) break;
-
-                if (!enemy[0].classList.contains("revive")) {
-                  enemy[0].parentNode.removeChild(enemy[0]);
-                }
-
-                if (enemy[0].classList.contains("revive")) {
-                  removeRevive(enemy[0]);
-                  enemy.pop();
-                }
-
-                if (enemy.length != 0)
-                  enemy[0].parentNode.removeChild(enemy[0]);
-
-                oldCheckerPlace.removeChild(newChecker);
-                newCheckerPlace.appendChild(newChecker);
-                newChecker.classList.remove("clickedChecker");
-
-                if (newChecker.classList.contains("hunter")) {
-                  break;
-                }
-                player =
-                  player === "red-checker" ? "blue-checker" : "red-checker";
-                break;
-              }
-
-              oldCheckerPlace.removeChild(newChecker);
-              newCheckerPlace.appendChild(newChecker);
-              newChecker.classList.remove("clickedChecker");
-
-              player =
-                player === "red-checker" ? "blue-checker" : "red-checker";
-              break;
-            }
-            // Check if there is an enemy in the square that the king will move through.
-            if (document.getElementById(currentSquareID).querySelector("div")) {
-              enemy.push(
-                // Store the ID of the square that the enemy lives in.
-                document.getElementById(currentSquareID).querySelector("div")
-              );
-              continue;
-            }
-          }
-        } else {
-          let currentSquareID = parseInt(startPlace);
-          let enemy = [];
-
-          while (currentSquareID <= destinationPlace) {
-            currentSquareID += 9;
-
-            if (newChecker.classList.contains("unstopable")) {
-              let isHasMyTeam = false;
-
-              for (let i = 0; i < enemy.length; i++) {
-                if (enemy[i].classList.contains(player)) {
-                  isHasMyTeam = true;
-                }
-              }
-              if (isHasMyTeam) break;
-              enemy.forEach((e) => {
-                if (!e.classList.contains("revive")) {
-                  e.parentNode.removeChild(e);
-                }
-
-                if (e.classList.contains("revive")) removeRevive(e);
-              });
-
-              oldCheckerPlace.removeChild(newChecker);
-              newCheckerPlace.appendChild(newChecker);
-              newChecker.classList.remove("clickedChecker");
-
-              player =
-                player === "red-checker" ? "blue-checker" : "red-checker";
-              break;
-            }
-
-            if (currentSquareID == destinationPlace) {
-              if (enemy.length >= 2) break;
-
-              if (enemy.length == 1) {
-                // Capture enemy.
-                if (enemy[0].classList.contains(player)) break;
-
-                if (!enemy[0].classList.contains("revive")) {
-                  enemy[0].parentNode.removeChild(e);
-                }
-
-                if (enemy[0].classList.contains("revive")) {
-                  removeRevive(enemy[0]);
-                  enemy.pop();
-                }
-
-                oldCheckerPlace.removeChild(newChecker);
-                newCheckerPlace.appendChild(newChecker);
-                newChecker.classList.remove("clickedChecker");
-
-                if (enemy.length != 0)
-                  enemy[0].parentNode.removeChild(enemy[0]);
-
-                if (newChecker.classList.contains("hunter")) {
-                  break;
-                }
-
-                player =
-                  player === "red-checker" ? "blue-checker" : "red-checker";
-                break;
-              }
-
-              oldCheckerPlace.removeChild(newChecker);
-              newCheckerPlace.appendChild(newChecker);
-              newChecker.classList.remove("clickedChecker");
-
-              player =
-                player === "red-checker" ? "blue-checker" : "red-checker";
-              break;
-            }
-
-            // Check if there is an enemy in the square that the king will move through.
-            if (document.getElementById(currentSquareID).querySelector("div")) {
-              enemy.push(
-                // Store the ID of the square that the enemy lives in.
-                document.getElementById(currentSquareID).querySelector("div")
-              );
-
-              continue;
-            }
-          }
-        }
-      }
-
-      if (leftbottom % 1 == 0) {
-        let currentSquareID = parseInt(startPlace);
-        let enemy = [];
-        while (currentSquareID >= destinationPlace) {
-          currentSquareID -= 9;
-          if (currentSquareID == destinationPlace) {
-            if (newChecker.classList.contains("unstopable")) {
-              let isHasMyTeam = false;
-
-              for (let i = 0; i < enemy.length; i++) {
-                if (enemy[i].classList.contains(player)) {
-                  isHasMyTeam = true;
-                }
-              }
-              if (isHasMyTeam) break;
-              enemy.forEach((e) => {
-                if (!e.classList.contains("revive")) {
-                  e.parentNode.removeChild(e);
-                }
-
-                if (e.classList.contains("revive")) removeRevive(e);
-              });
-
-              oldCheckerPlace.removeChild(newChecker);
-              newCheckerPlace.appendChild(newChecker);
-              newChecker.classList.remove("clickedChecker");
-
-              player =
-                player === "red-checker" ? "blue-checker" : "red-checker";
-              break;
-            }
-
-            if (enemy.length >= 2) break;
-            if (enemy.length == 1) {
-              if (!enemy[0].classList.contains("revive")) {
-                enemy[0].parentNode.removeChild(enemy[0]);
-              }
-
-              if (enemy[0].classList.contains("revive")) {
-                removeRevive(enemy[0]);
-                enemy.pop();
-              }
-              oldCheckerPlace.removeChild(newChecker);
-              newCheckerPlace.appendChild(newChecker);
-              newChecker.classList.remove("clickedChecker");
-
-              if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
-
-              if (newChecker.classList.contains("hunter")) {
-                break;
-              }
-
-              player =
-                player === "red-checker" ? "blue-checker" : "red-checker";
-              break;
-            }
-
-            oldCheckerPlace.removeChild(newChecker);
-            newCheckerPlace.appendChild(newChecker);
-            newChecker.classList.remove("clickedChecker");
-            player = player === "red-checker" ? "blue-checker" : "red-checker";
-            break;
-          }
-          if (document.getElementById(currentSquareID).querySelector("div")) {
-            enemy.push(
-              document.getElementById(currentSquareID).querySelector("div")
-            );
-            continue;
-          }
-        }
-      } else {
-        let currentSquareID = parseInt(startPlace);
-        let enemy = [];
-        while (currentSquareID >= destinationPlace) {
-          currentSquareID -= 7;
-          if (currentSquareID == destinationPlace) {
-            if (newChecker.classList.contains("unstopable")) {
-              let isHasMyTeam = false;
-
-              for (let i = 0; i < enemy.length; i++) {
-                if (enemy[i].classList.contains(player)) {
-                  isHasMyTeam = true;
-                }
-              }
-              if (isHasMyTeam) break;
-              enemy.forEach((e) => {
-                if (!e.classList.contains("revive")) {
-                  e.parentNode.removeChild(e);
-                }
-
-                if (e.classList.contains("revive")) removeRevive(e);
-              });
-
-              oldCheckerPlace.removeChild(newChecker);
-              newCheckerPlace.appendChild(newChecker);
-              newChecker.classList.remove("clickedChecker");
-
-              player =
-                player === "red-checker" ? "blue-checker" : "red-checker";
-              break;
-            }
-
-            if (enemy.length >= 2) break;
-            if (enemy.length == 1) {
-              if (enemy[0].classList.contains(player)) break;
-
-              if (!enemy[0].classList.contains("revive")) {
-                enemy[0].parentNode.removeChild(enemy[0]);
-              }
-
-              if (enemy[0].classList.contains("revive")) {
-                removeRevive(enemy[0]);
-                enemy.pop();
-              }
-              oldCheckerPlace.removeChild(newChecker);
-              newCheckerPlace.appendChild(newChecker);
-              newChecker.classList.remove("clickedChecker");
-              if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
-
-              if (newChecker.classList.contains("hunter")) {
-                break;
-              }
-
-              player =
-                player === "red-checker" ? "blue-checker" : "red-checker";
-              break;
-            }
-
-            oldCheckerPlace.removeChild(newChecker);
-            newCheckerPlace.appendChild(newChecker);
-            newChecker.classList.remove("clickedChecker");
-            player = player === "red-checker" ? "blue-checker" : "red-checker";
-            break;
-          }
-          if (document.getElementById(currentSquareID).querySelector("div")) {
-            enemy.push(
-              document.getElementById(currentSquareID).querySelector("div")
-            );
-            continue;
-          }
-        }
-      }
-
-      // Remove the clicked effect if the checker can't move.
-      document
-        .getElementById(parseInt(startPlace))
-        .querySelector("div")
-        .classList.remove("clickedChecker");
-
-      return;
-    }
+    king(
+      isKing,
+      startPlace,
+      destinationPlace,
+      oldCheckerPlace,
+      newChecker,
+      newCheckerPlace
+    );
 
     oldCheckerPlace.removeChild(newChecker);
     newCheckerPlace.appendChild(newChecker);
@@ -626,6 +304,336 @@ function beKing(skills, checker) {
 function removeRevive(element) {
   if (element.classList.contains("revive")) {
     element.classList.remove("revive");
+  }
+}
+
+function king(
+  isKing,
+  startPlace,
+  destinationPlace,
+  oldCheckerPlace,
+  newChecker,
+  newCheckerPlace
+) {
+  if (isKing) {
+    let topToBottomDirection =
+      parseInt(destinationPlace) - parseInt(startPlace);
+    let bottomToTopDirection =
+      parseInt(startPlace) - parseInt(destinationPlace);
+
+    let leftTop = topToBottomDirection / 7;
+    let leftbottom = bottomToTopDirection / 9;
+
+    const isBottomPlace = parseInt(startPlace) < parseInt(destinationPlace);
+
+    if (isBottomPlace) {
+      if (leftTop % 1 == 0) {
+        let currentSquareID = parseInt(startPlace);
+        let enemy = [];
+        while (currentSquareID <= destinationPlace) {
+          currentSquareID += 7;
+          if (currentSquareID == destinationPlace) {
+            if (newChecker.classList.contains("unstopable")) {
+              let isHasMyTeam = false;
+
+              for (let i = 0; i < enemy.length; i++) {
+                if (enemy[i].classList.contains(player)) {
+                  isHasMyTeam = true;
+                }
+              }
+
+              if (isHasMyTeam) break;
+
+              enemy.forEach((e) => {
+                if (!e.classList.contains("revive")) {
+                  e.parentNode.removeChild(e);
+                }
+                if (e.classList.contains("revive")) removeRevive(e);
+              });
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
+            }
+            if (enemy.length >= 2) break;
+            if (enemy.length == 1) {
+              // Capture enemy.
+
+              if (enemy[0].classList.contains(player)) break;
+
+              if (!enemy[0].classList.contains("revive")) {
+                enemy[0].parentNode.removeChild(enemy[0]);
+              }
+
+              if (enemy[0].classList.contains("revive")) {
+                removeRevive(enemy[0]);
+                enemy.pop();
+              }
+
+              if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+
+              if (newChecker.classList.contains("hunter")) {
+                break;
+              }
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
+            }
+
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+          // Check if there is an enemy in the square that the king will move through.
+          if (document.getElementById(currentSquareID).querySelector("div")) {
+            enemy.push(
+              // Store the ID of the square that the enemy lives in.
+              document.getElementById(currentSquareID).querySelector("div")
+            );
+            continue;
+          }
+        }
+      } else {
+        let currentSquareID = parseInt(startPlace);
+        let enemy = [];
+
+        while (currentSquareID <= destinationPlace) {
+          currentSquareID += 9;
+
+          if (newChecker.classList.contains("unstopable")) {
+            let isHasMyTeam = false;
+
+            for (let i = 0; i < enemy.length; i++) {
+              if (enemy[i].classList.contains(player)) {
+                isHasMyTeam = true;
+              }
+            }
+            if (isHasMyTeam) break;
+            enemy.forEach((e) => {
+              if (!e.classList.contains("revive")) {
+                e.parentNode.removeChild(e);
+              }
+
+              if (e.classList.contains("revive")) removeRevive(e);
+            });
+
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+
+          if (currentSquareID == destinationPlace) {
+            if (enemy.length >= 2) break;
+
+            if (enemy.length == 1) {
+              // Capture enemy.
+              if (enemy[0].classList.contains(player)) break;
+
+              if (!enemy[0].classList.contains("revive")) {
+                enemy[0].parentNode.removeChild(e);
+              }
+
+              if (enemy[0].classList.contains("revive")) {
+                removeRevive(enemy[0]);
+                enemy.pop();
+              }
+
+              oldCheckerPlace.removeChild(newChecker);
+              newCheckerPlace.appendChild(newChecker);
+              newChecker.classList.remove("clickedChecker");
+
+              if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
+
+              if (newChecker.classList.contains("hunter")) {
+                break;
+              }
+
+              player =
+                player === "red-checker" ? "blue-checker" : "red-checker";
+              break;
+            }
+
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+
+          // Check if there is an enemy in the square that the king will move through.
+          if (document.getElementById(currentSquareID).querySelector("div")) {
+            enemy.push(
+              // Store the ID of the square that the enemy lives in.
+              document.getElementById(currentSquareID).querySelector("div")
+            );
+
+            continue;
+          }
+        }
+      }
+    }
+
+    if (leftbottom % 1 == 0) {
+      let currentSquareID = parseInt(startPlace);
+      let enemy = [];
+      while (currentSquareID >= destinationPlace) {
+        currentSquareID -= 9;
+        if (currentSquareID == destinationPlace) {
+          if (newChecker.classList.contains("unstopable")) {
+            let isHasMyTeam = false;
+
+            for (let i = 0; i < enemy.length; i++) {
+              if (enemy[i].classList.contains(player)) {
+                isHasMyTeam = true;
+              }
+            }
+            if (isHasMyTeam) break;
+            enemy.forEach((e) => {
+              if (!e.classList.contains("revive")) {
+                e.parentNode.removeChild(e);
+              }
+
+              if (e.classList.contains("revive")) removeRevive(e);
+            });
+
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+
+          if (enemy.length >= 2) break;
+          if (enemy.length == 1) {
+            if (!enemy[0].classList.contains("revive")) {
+              enemy[0].parentNode.removeChild(enemy[0]);
+            }
+
+            if (enemy[0].classList.contains("revive")) {
+              removeRevive(enemy[0]);
+              enemy.pop();
+            }
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+
+            if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
+
+            if (newChecker.classList.contains("hunter")) {
+              break;
+            }
+
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+
+          oldCheckerPlace.removeChild(newChecker);
+          newCheckerPlace.appendChild(newChecker);
+          newChecker.classList.remove("clickedChecker");
+          player = player === "red-checker" ? "blue-checker" : "red-checker";
+          break;
+        }
+        if (document.getElementById(currentSquareID).querySelector("div")) {
+          enemy.push(
+            document.getElementById(currentSquareID).querySelector("div")
+          );
+          continue;
+        }
+      }
+    } else {
+      let currentSquareID = parseInt(startPlace);
+      let enemy = [];
+      while (currentSquareID >= destinationPlace) {
+        currentSquareID -= 7;
+        if (currentSquareID == destinationPlace) {
+          if (newChecker.classList.contains("unstopable")) {
+            let isHasMyTeam = false;
+
+            for (let i = 0; i < enemy.length; i++) {
+              if (enemy[i].classList.contains(player)) {
+                isHasMyTeam = true;
+              }
+            }
+            if (isHasMyTeam) break;
+            enemy.forEach((e) => {
+              if (!e.classList.contains("revive")) {
+                e.parentNode.removeChild(e);
+              }
+
+              if (e.classList.contains("revive")) removeRevive(e);
+            });
+
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+
+          if (enemy.length >= 2) break;
+          if (enemy.length == 1) {
+            if (enemy[0].classList.contains(player)) break;
+
+            if (!enemy[0].classList.contains("revive")) {
+              enemy[0].parentNode.removeChild(enemy[0]);
+            }
+
+            if (enemy[0].classList.contains("revive")) {
+              removeRevive(enemy[0]);
+              enemy.pop();
+            }
+            oldCheckerPlace.removeChild(newChecker);
+            newCheckerPlace.appendChild(newChecker);
+            newChecker.classList.remove("clickedChecker");
+            if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
+
+            if (newChecker.classList.contains("hunter")) {
+              break;
+            }
+
+            player = player === "red-checker" ? "blue-checker" : "red-checker";
+            break;
+          }
+
+          oldCheckerPlace.removeChild(newChecker);
+          newCheckerPlace.appendChild(newChecker);
+          newChecker.classList.remove("clickedChecker");
+          player = player === "red-checker" ? "blue-checker" : "red-checker";
+          break;
+        }
+        if (document.getElementById(currentSquareID).querySelector("div")) {
+          enemy.push(
+            document.getElementById(currentSquareID).querySelector("div")
+          );
+          continue;
+        }
+      }
+    }
+
+    // Remove the clicked effect if the checker can't move.
+    document
+      .getElementById(parseInt(startPlace))
+      .querySelector("div")
+      .classList.remove("clickedChecker");
+
+    return;
   }
 }
 
