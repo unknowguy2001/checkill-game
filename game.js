@@ -68,6 +68,7 @@ function gameStart() {
   canMoveChecker(player);
 }
 
+//!BUG: Sometimes the king can move continuously. Even though I don't have hunter skills.
 function canMoveChecker(player) {
   const whiteSquares = document.querySelectorAll(".white-square");
   let startPlace = null; //This variable will store the ID of the square that the chosen checker lives in before moving.
@@ -128,7 +129,6 @@ function canMoveChecker(player) {
               if (enemy.length >= 2) break;
               if (enemy.length == 1) {
                 // Capture enemy.
-                console.log("capture");
 
                 if (enemy[0].classList.contains(player)) break;
 
@@ -216,7 +216,7 @@ function canMoveChecker(player) {
                 if (enemy[0].classList.contains(player)) break;
 
                 if (!enemy[0].classList.contains("revive")) {
-                  enemy[0].parentNode.removeChild(e);
+                  enemy[0].parentNode.removeChild(enemy[0]);
                 }
 
                 if (enemy[0].classList.contains("revive")) {
@@ -426,6 +426,7 @@ function canMoveChecker(player) {
     }
 
     player = player === "red-checker" ? "blue-checker" : "red-checker";
+    checkWinner();
   }
 
   whiteSquares.forEach((whiteSquare) => {
@@ -637,6 +638,35 @@ function beKing(skills, checker) {
 function removeRevive(element) {
   if (element.classList.contains("revive")) {
     element.classList.remove("revive");
+  }
+}
+
+function checkWinner() {
+  console.log("check");
+  const whiteSquares = document.querySelectorAll(".white-square");
+
+  let red = null;
+  let blue = null;
+  whiteSquares.forEach((whiteSquare) => {
+    let div = whiteSquare.querySelector("div");
+    console.log(div);
+    if (div != null) {
+      if (div.classList.contains("red-checker")) {
+        red += 1;
+      } else {
+        blue += 1;
+      }
+    }
+  });
+  console.log(red);
+  console.log(blue);
+  if (red == null) {
+    alert("Player blue win!");
+    location.reload();
+  }
+  if (blue == null) {
+    alert("Player red win!");
+    location.reload();
   }
 }
 
