@@ -68,7 +68,6 @@ function gameStart() {
   canMoveChecker(player);
 }
 
-//!BUG: Sometimes the king can move continuously. Even though I don't have hunter skills.
 function canMoveChecker(player) {
   const whiteSquares = document.querySelectorAll(".white-square");
   let startPlace = null; //This variable will store the ID of the square that the chosen checker lives in before moving.
@@ -113,7 +112,7 @@ function canMoveChecker(player) {
 
                 enemy.forEach((e) => {
                   if (!e.classList.contains("revive")) {
-                    e.parentNode.removeChild(e);
+                    e.remove();
                   }
                   if (e.classList.contains("revive")) removeRevive(e);
                 });
@@ -124,6 +123,7 @@ function canMoveChecker(player) {
 
                 player =
                   player === "red-checker" ? "blue-checker" : "red-checker";
+                checkWinner();
                 break;
               }
               if (enemy.length >= 2) break;
@@ -133,7 +133,7 @@ function canMoveChecker(player) {
                 if (enemy[0].classList.contains(player)) break;
 
                 if (!enemy[0].classList.contains("revive")) {
-                  enemy[0].parentNode.removeChild(enemy[0]);
+                  enemy[0].remove();
                 }
 
                 if (enemy[0].classList.contains("revive")) {
@@ -141,19 +141,24 @@ function canMoveChecker(player) {
                   enemy.pop();
                 }
 
-                if (enemy.length != 0)
-                  enemy[0].parentNode.removeChild(enemy[0]);
-
+                if (enemy.length != 0) {
+                  if (enemy[0]) {
+                    enemy[0].remove();
+                  }
+                }
+                console.log("continue");
                 oldCheckerPlace.removeChild(newChecker);
                 newCheckerPlace.appendChild(newChecker);
                 newChecker.classList.remove("clickedChecker");
-
+                checkWinner();
                 if (newChecker.classList.contains("hunter")) {
+                  checkWinner();
                   break;
                 }
                 player =
                   player === "red-checker" ? "blue-checker" : "red-checker";
                 console.log(player);
+                checkWinner();
                 break;
               }
 
@@ -176,6 +181,7 @@ function canMoveChecker(player) {
             }
           }
         } else {
+          console.log("spot");
           let currentSquareID = parseInt(startPlace);
           let enemy = [];
 
@@ -193,7 +199,7 @@ function canMoveChecker(player) {
               if (isHasMyTeam) break;
               enemy.forEach((e) => {
                 if (!e.classList.contains("revive")) {
-                  e.parentNode.removeChild(e);
+                  e.remove();
                 }
 
                 if (e.classList.contains("revive")) removeRevive(e);
@@ -205,6 +211,7 @@ function canMoveChecker(player) {
 
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
+              checkWinner();
               break;
             }
 
@@ -216,7 +223,7 @@ function canMoveChecker(player) {
                 if (enemy[0].classList.contains(player)) break;
 
                 if (!enemy[0].classList.contains("revive")) {
-                  enemy[0].parentNode.removeChild(enemy[0]);
+                  enemy[0].remove();
                 }
 
                 if (enemy[0].classList.contains("revive")) {
@@ -228,15 +235,16 @@ function canMoveChecker(player) {
                 newCheckerPlace.appendChild(newChecker);
                 newChecker.classList.remove("clickedChecker");
 
-                if (enemy.length != 0)
-                  enemy[0].parentNode.removeChild(enemy[0]);
+                if (enemy.length != 0) enemy[0].remove();
 
                 if (newChecker.classList.contains("hunter")) {
+                  checkWinner();
                   break;
                 }
 
                 player =
                   player === "red-checker" ? "blue-checker" : "red-checker";
+                checkWinner();
                 break;
               }
 
@@ -246,6 +254,7 @@ function canMoveChecker(player) {
 
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
+              checkWinner();
               break;
             }
 
@@ -263,6 +272,7 @@ function canMoveChecker(player) {
       }
 
       if (leftbottom % 1 == 0) {
+        console.log("come");
         let currentSquareID = parseInt(startPlace);
         let enemy = [];
         while (currentSquareID >= destinationPlace) {
@@ -279,7 +289,7 @@ function canMoveChecker(player) {
               if (isHasMyTeam) break;
               enemy.forEach((e) => {
                 if (!e.classList.contains("revive")) {
-                  e.parentNode.removeChild(e);
+                  e.remove();
                 }
 
                 if (e.classList.contains("revive")) removeRevive(e);
@@ -297,7 +307,7 @@ function canMoveChecker(player) {
             if (enemy.length >= 2) break;
             if (enemy.length == 1) {
               if (!enemy[0].classList.contains("revive")) {
-                enemy[0].parentNode.removeChild(enemy[0]);
+                enemy[0].remove();
               }
 
               if (enemy[0].classList.contains("revive")) {
@@ -308,7 +318,7 @@ function canMoveChecker(player) {
               newCheckerPlace.appendChild(newChecker);
               newChecker.classList.remove("clickedChecker");
 
-              if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
+              if (enemy.length != 0) enemy[0].remove();
 
               if (newChecker.classList.contains("hunter")) {
                 break;
@@ -349,10 +359,13 @@ function canMoveChecker(player) {
               if (isHasMyTeam) break;
               enemy.forEach((e) => {
                 if (!e.classList.contains("revive")) {
-                  e.parentNode.removeChild(e);
+                  e.remove();
                 }
 
-                if (e.classList.contains("revive")) removeRevive(e);
+                if (e.classList.contains("revive")) {
+                  removeRevive(e);
+                  enemy.shift();
+                }
               });
 
               oldCheckerPlace.removeChild(newChecker);
@@ -369,17 +382,18 @@ function canMoveChecker(player) {
               if (enemy[0].classList.contains(player)) break;
 
               if (!enemy[0].classList.contains("revive")) {
-                enemy[0].parentNode.removeChild(enemy[0]);
+                enemy[0].remove();
               }
 
               if (enemy[0].classList.contains("revive")) {
                 removeRevive(enemy[0]);
                 enemy.pop();
               }
+
               oldCheckerPlace.removeChild(newChecker);
               newCheckerPlace.appendChild(newChecker);
               newChecker.classList.remove("clickedChecker");
-              if (enemy.length != 0) enemy[0].parentNode.removeChild(enemy[0]);
+              if (enemy.length != 0) enemy[0].remove();
 
               if (newChecker.classList.contains("hunter")) {
                 break;
@@ -503,11 +517,12 @@ function canMoveChecker(player) {
                     ) {
                       if (rightNeighbor.classList.contains("revive")) {
                         removeRevive(rightNeighbor);
-                        return;
+                      } else {
+                        rightNeighbor.removeChild(
+                          rightNeighbor.querySelector("div")
+                        );
                       }
-                      rightNeighbor.removeChild(
-                        rightNeighbor.querySelector("div")
-                      );
+
                       moveChecker();
                     }
                   } else if (
@@ -521,12 +536,11 @@ function canMoveChecker(player) {
                     ) {
                       if (leftNeighbor.classList.contains("revive")) {
                         removeRevive(leftNeighbor);
-                        return;
+                      } else {
+                        leftNeighbor.removeChild(
+                          leftNeighbor.querySelector("div")
+                        );
                       }
-
-                      leftNeighbor.removeChild(
-                        leftNeighbor.querySelector("div")
-                      );
 
                       moveChecker();
                     }
@@ -560,11 +574,14 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
-                      if (!rightNeighbor.classList.contains("revive")) {
+                      if (rightNeighbor.classList.contains("revive")) {
+                        removeRevive(rightNeighbor);
+                      } else {
                         rightNeighbor.removeChild(
                           rightNeighbor.querySelector("div")
                         );
                       }
+
                       moveChecker();
                     }
                   } else if (
@@ -576,7 +593,9 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
-                      if (!leftNeighbor.classList.contains("revive")) {
+                      if (leftNeighbor.classList.contains("revive")) {
+                        removeRevive(leftNeighbor);
+                      } else {
                         leftNeighbor.removeChild(
                           leftNeighbor.querySelector("div")
                         );
