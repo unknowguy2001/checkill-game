@@ -72,3 +72,48 @@ main {
 .king {
   border: 3px solid black;
 }
+
+@media only screen and (max-width: 600px) {
+  .checker-piece {
+    width: 20px;
+    height: 20px;
+  }
+  .square {
+    width: 40px;
+    height: 40px;
+  }
+  #board {
+    width: 320px;
+    height: 320px;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .checker-piece {
+    width: 35px;
+    height: 35px;
+  }
+  .square {
+    width: 60px;
+    height: 60px;
+  }
+  #board {
+    width: 480px;
+    height: 480px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .checker-piece {
+    width: 35px;
+    height: 35px;
+  }
+  .square {
+    width: 80px;
+    height: 80px;
+  }
+  #board {
+    width: 640px;
+    height: 640px;
+  }
+}
