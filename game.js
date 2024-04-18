@@ -149,7 +149,7 @@ function canMoveChecker(player) {
                     enemy[0].remove();
                   }
                 }
-                console.log("continue");
+
                 oldCheckerPlace.removeChild(newChecker);
                 newCheckerPlace.appendChild(newChecker);
                 newChecker.classList.remove("clickedChecker");
@@ -172,7 +172,7 @@ function canMoveChecker(player) {
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
               textPlayer.innerHTML = `${player}`;
-              console.log("2" + player);
+
               break;
             }
             // Check if there is an enemy in the square that the king will move through.
@@ -185,7 +185,6 @@ function canMoveChecker(player) {
             }
           }
         } else {
-          console.log("spot");
           let currentSquareID = parseInt(startPlace);
           let enemy = [];
 
@@ -279,7 +278,6 @@ function canMoveChecker(player) {
       }
 
       if (leftbottom % 1 == 0) {
-        console.log("come");
         let currentSquareID = parseInt(startPlace);
         let enemy = [];
         while (currentSquareID >= destinationPlace) {
@@ -528,8 +526,12 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
-                      if (rightNeighbor.classList.contains("revive")) {
-                        removeRevive(rightNeighbor);
+                      if (
+                        rightNeighbor
+                          .querySelector("div")
+                          .classList.contains("revive")
+                      ) {
+                        removeRevive(rightNeighbor.querySelector("div"));
                       } else {
                         rightNeighbor.removeChild(
                           rightNeighbor.querySelector("div")
@@ -547,8 +549,12 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
-                      if (leftNeighbor.classList.contains("revive")) {
-                        removeRevive(leftNeighbor);
+                      if (
+                        leftNeighbor
+                          .querySelector("div")
+                          .classList.contains("revive")
+                      ) {
+                        removeRevive(leftNeighbor.querySelector("div"));
                       } else {
                         leftNeighbor.removeChild(
                           leftNeighbor.querySelector("div")
@@ -587,8 +593,12 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
-                      if (rightNeighbor.classList.contains("revive")) {
-                        removeRevive(rightNeighbor);
+                      if (
+                        rightNeighbor
+                          .querySelector("div")
+                          .classList.contains("revive")
+                      ) {
+                        removeRevive(rightNeighbor.querySelector("div"));
                       } else {
                         rightNeighbor.removeChild(
                           rightNeighbor.querySelector("div")
@@ -606,8 +616,12 @@ function canMoveChecker(player) {
                         .querySelector("div")
                         .classList.contains("protection")
                     ) {
-                      if (leftNeighbor.classList.contains("revive")) {
-                        removeRevive(leftNeighbor);
+                      if (
+                        leftNeighbor
+                          .querySelector("div")
+                          .classList.contains("revive")
+                      ) {
+                        removeRevive(leftNeighbor.querySelector("div"));
                       } else {
                         leftNeighbor.removeChild(
                           leftNeighbor.querySelector("div")
@@ -674,14 +688,12 @@ function removeRevive(element) {
 }
 
 function checkWinner() {
-  console.log("check");
   const whiteSquares = document.querySelectorAll(".white-square");
 
   let red = null;
   let blue = null;
   whiteSquares.forEach((whiteSquare) => {
     let div = whiteSquare.querySelector("div");
-    console.log(div);
     if (div != null) {
       if (div.classList.contains("red-checker")) {
         red += 1;
@@ -690,8 +702,7 @@ function checkWinner() {
       }
     }
   });
-  console.log(red);
-  console.log(blue);
+
   if (red == null) {
     alert("Player blue win!");
     location.reload();
