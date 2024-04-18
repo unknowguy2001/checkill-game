@@ -1,4 +1,5 @@
 const board = document.getElementById("board");
+const textPlayer = document.getElementById("text");
 //* protection = can't captured with starndard piece
 //* hunter = if can captured enemy, hunter will continuously move
 //* revive = when enemy capture this piece will not die (just 1)
@@ -66,6 +67,7 @@ function createCheckerPiece(type) {
 
 function gameStart() {
   canMoveChecker(player);
+  textPlayer.innerHTML = `${player}`;
 }
 
 function canMoveChecker(player) {
@@ -123,6 +125,7 @@ function canMoveChecker(player) {
 
                 player =
                   player === "red-checker" ? "blue-checker" : "red-checker";
+                textPlayer.innerHTML = `${player}`;
                 checkWinner();
                 break;
               }
@@ -157,7 +160,7 @@ function canMoveChecker(player) {
                 }
                 player =
                   player === "red-checker" ? "blue-checker" : "red-checker";
-                console.log(player);
+                textPlayer.innerHTML = `${player}`;
                 checkWinner();
                 break;
               }
@@ -168,6 +171,7 @@ function canMoveChecker(player) {
 
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
+              textPlayer.innerHTML = `${player}`;
               console.log("2" + player);
               break;
             }
@@ -211,6 +215,7 @@ function canMoveChecker(player) {
 
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
+              textPlayer.innerHTML = `${player}`;
               checkWinner();
               break;
             }
@@ -244,6 +249,7 @@ function canMoveChecker(player) {
 
                 player =
                   player === "red-checker" ? "blue-checker" : "red-checker";
+                textPlayer.innerHTML = `${player}`;
                 checkWinner();
                 break;
               }
@@ -254,6 +260,7 @@ function canMoveChecker(player) {
 
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
+              textPlayer.innerHTML = `${player}`;
               checkWinner();
               break;
             }
@@ -301,6 +308,7 @@ function canMoveChecker(player) {
 
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
+              textPlayer.innerHTML = `${player}`;
               break;
             }
 
@@ -326,6 +334,7 @@ function canMoveChecker(player) {
 
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
+              textPlayer.innerHTML = `${player}`;
               break;
             }
 
@@ -333,6 +342,7 @@ function canMoveChecker(player) {
             newCheckerPlace.appendChild(newChecker);
             newChecker.classList.remove("clickedChecker");
             player = player === "red-checker" ? "blue-checker" : "red-checker";
+            textPlayer.innerHTML = `${player}`;
             break;
           }
           if (document.getElementById(currentSquareID).querySelector("div")) {
@@ -401,6 +411,7 @@ function canMoveChecker(player) {
 
               player =
                 player === "red-checker" ? "blue-checker" : "red-checker";
+              textPlayer.innerHTML = `${player}`;
               break;
             }
 
@@ -408,6 +419,7 @@ function canMoveChecker(player) {
             newCheckerPlace.appendChild(newChecker);
             newChecker.classList.remove("clickedChecker");
             player = player === "red-checker" ? "blue-checker" : "red-checker";
+            textPlayer.innerHTML = `${player}`;
             break;
           }
           if (document.getElementById(currentSquareID).querySelector("div")) {
@@ -440,6 +452,7 @@ function canMoveChecker(player) {
     }
 
     player = player === "red-checker" ? "blue-checker" : "red-checker";
+    textPlayer.innerHTML = `${player}`;
     checkWinner();
   }
 

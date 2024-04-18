@@ -7,6 +7,8 @@
 main {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
   justify-content: center;
   align-items: center;
   background: rgb(128, 128, 128);
@@ -15,6 +17,9 @@ main {
     rgba(128, 128, 128, 1) 45%,
     rgba(211, 211, 211, 1) 100%
   );
+}
+h1 {
+  color: black;
 }
 
 #board {
